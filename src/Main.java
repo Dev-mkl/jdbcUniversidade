@@ -1,4 +1,5 @@
 import org.example.dao.AlunoDAO;
+import org.example.dao.AutenticadorDAO;
 import org.example.dao.CursoDAO;
 import org.example.factory.CreateTable;
 import org.example.model.Aluno;
@@ -23,10 +24,12 @@ public class Main {
         System.out.print("Senha: ");
         String senha = sc.nextLine();
 
-        if (autenticar(usuario, senha)) {
-            System.out.println("Login bem-sucedido! Bem-vindo, " + usuario + "!");
-        } else {
-            System.out.println("Usuário ou senha incorretos.");
+        AutenticadorDAO autenticadorDAO = new AutenticadorDAO();
+        if(autenticadorDAO.autenticarUsuario(usuario, senha)){
+            menuUsuario();
+        }
+        if(autenticadorDAO.autenticarUsuario(usuario, senha)){
+            menuAdmin();
         }
 
     }
@@ -106,7 +109,6 @@ public class Main {
 
             System.out.println("=====Aluno=====");
             System.out.println("1 - Cadastrar aluno.");
-            System.out.println("2 - Atualizar dados do aluno.");
             System.out.println("3 - Excluir aluno.");
             System.out.println("4 - Exibir dados do aluno.");
             System.out.println("0 - Sair");
