@@ -12,8 +12,41 @@ public class Admin {
     }
 
     public String criarLogin(){
-        String[] loginCriar = nome.split(" ");
-        return login;
+        String[] PrimeiroNome = nome.split(" ");
+        String login = "admin/" + PrimeiroNome[0];
+        return this.login = login;
+    }
+
+    public Boolean verificaNome(){
+        if (nome.matches("[^a-zA-ZÀ-ÖØ-öø-ÿ\\s]")){
+            throw new IllegalArgumentException("Nome com formato incorreto. Verifique por favor e tente novamente.");
+        }
+        if (nome == null){
+            throw new IllegalArgumentException("Nome não preenchido, por favor verifique e tente novamente.");
+        }
+        return true;
+    }
+
+    public boolean verificarSenha(){
+        if (senha.length() < 8 || senha.length() > 12){
+            throw new IllegalArgumentException("Senha inválida, a senha deve ter mais de 8  e menos de 12 caracteres.");
+        }
+        if(!senha.matches("[^a-zA-Z0-9]")){
+            throw new IllegalArgumentException("Senha inválida, a senha deve conter caracteres especiais.");
+        }
+        if (senha == null){
+            throw new IllegalArgumentException("Senha inválida, a senha não pode ser nula.");
+        }
+        if(!senha.matches("[A-ZÀ-ÖØ]")){
+            throw new IllegalArgumentException("Senha inválida, a senha deve conter letras maiúsculas.");
+        }
+        if(!senha.matches("[a-zöø-ÿ]")){
+            throw new IllegalArgumentException("Senha inválida, a senha deve conter letras minúsculas.");
+        }
+        if(senha.contains(" ")){
+            throw new IllegalArgumentException("Senha inválida, a senha não pode conter espaço.");
+        }
+        return true;
     }
 
 //    GETTERS E SETTERS3

@@ -3,8 +3,6 @@ package org.example.model;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Date;
-import java.util.zip.DataFormatException;
 
 public class Aluno {
     private int id;
@@ -54,6 +52,16 @@ public class Aluno {
             System.out.println("Erro: data de nascimento incorreta" + e.getMessage());
         }
         return dataNascimento;
+    }
+
+    public Boolean verificaNome() {
+        if (nome.matches("[^a-zA-ZÀ-ÖØ-öø-ÿ\\s]")) {
+            throw new IllegalArgumentException("Nome com formato incorreto. Verifique por favor e tente novamente.");
+        }
+        if (nome == null) {
+            throw new IllegalArgumentException("Nome não preenchido, por favor verifique e tente novamente.");
+        }
+        return true;
     }
 
 //    Getters e Setters

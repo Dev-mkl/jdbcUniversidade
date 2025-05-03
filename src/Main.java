@@ -3,12 +3,7 @@ import org.example.dao.CursoDAO;
 import org.example.factory.CreateTable;
 import org.example.model.Aluno;
 import org.example.model.Curso;
-import org.postgresql.core.ConnectionFactory;
-import org.postgresql.core.QueryExecutor;
-import org.postgresql.util.HostSpec;
 
-import java.sql.SQLException;
-import java.util.Properties;
 import java.util.Scanner;
 
 
@@ -17,7 +12,8 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         /*CreateTable ct = new CreateTable();
         ct.createTableAluno();
-        ct.createTableCurso();*/
+        ct.createTableCurso();
+        ct.createTableAdmin();*/
 
         System.out.println("=== Tela de Login ===");
 
