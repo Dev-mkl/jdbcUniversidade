@@ -13,7 +13,7 @@ public class Admin {
 
     public String criarLogin(){
         String[] PrimeiroNome = nome.split(" ");
-        String login = "admin/" + PrimeiroNome[0];
+        String login = "admin/" + PrimeiroNome[0].toLowerCase();
         return this.login = login;
     }
 
@@ -31,16 +31,16 @@ public class Admin {
         if (senha.length() < 8 || senha.length() > 12){
             throw new IllegalArgumentException("Senha inválida, a senha deve ter mais de 8  e menos de 12 caracteres.");
         }
-        if(!senha.matches("[^a-zA-Z0-9]")){
+        if(!senha.matches(".*[^a-zA-Z0-9].*")){
             throw new IllegalArgumentException("Senha inválida, a senha deve conter caracteres especiais.");
         }
         if (senha == null){
             throw new IllegalArgumentException("Senha inválida, a senha não pode ser nula.");
         }
-        if(!senha.matches("[A-ZÀ-ÖØ]")){
+        if(!senha.matches(".*[A-Z].*")){
             throw new IllegalArgumentException("Senha inválida, a senha deve conter letras maiúsculas.");
         }
-        if(!senha.matches("[a-zöø-ÿ]")){
+        if(!senha.matches(".*[a-z].*")){
             throw new IllegalArgumentException("Senha inválida, a senha deve conter letras minúsculas.");
         }
         if(senha.contains(" ")){

@@ -16,6 +16,7 @@ public class CreateTable {
                     data_de_nascimento date NOT NULL,
                     cpf varchar(15) NOT NULL,
                     id_curso integer NOT NULL,
+                    senha varchar(12) NOT NULL,
                     CONSTRAINT aluno_pkeyteste PRIMARY KEY (id_aluno),
                     CONSTRAINT aluno_matricula_keyteste UNIQUE (matricula),
                     CONSTRAINT matricula_uniqueteste UNIQUE (matricula),
@@ -59,9 +60,13 @@ public class CreateTable {
                 CREATE TABLE IF NOT EXISTS admin(
                 id serial primary key NOT NULL,
                 nome varchar(255) NOT NULL,
-                senha char(12) not null,
+                senha varchar(12) not null,
                 login varchar(100) NOT NULL
-                )
+                );
+                   
+                insert into admin(nome, senha, login)
+                values
+                    ('SILVIO VIDAL','Svidal2025!','admin/silvio')
                 """;
 
         try(Connection con = ConnectionFactory.getConnection();

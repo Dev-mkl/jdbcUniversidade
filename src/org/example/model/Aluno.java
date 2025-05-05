@@ -12,14 +12,37 @@ public class Aluno {
     private LocalDate dataNascimento;
     private String dataString;
     private String cpf;
+    private String senha;
     private int id_curso;
 
-    public Aluno(String nome, long telefone, String dataString, String cpf, int id_curso) {
+    public Aluno(String nome, long telefone, String dataString, String cpf, int id_curso, String senha) {
         this.nome = nome;
         this.telefone = telefone;
         this.dataString= dataString;
         this.cpf = cpf;
         this.id_curso = id_curso;
+    }
+
+    public boolean verificarSenha(){
+        if (senha.length() < 8 || senha.length() > 12){
+            throw new IllegalArgumentException("Senha inválida, a senha deve ter mais de 8  e menos de 12 caracteres.");
+        }
+        if(!senha.matches(".*[^a-zA-Z0-9].*")){
+            throw new IllegalArgumentException("Senha inválida, a senha deve conter caracteres especiais.");
+        }
+        if (senha == null){
+            throw new IllegalArgumentException("Senha inválida, a senha não pode ser nula.");
+        }
+        if(!senha.matches(".*[A-Z].*")){
+            throw new IllegalArgumentException("Senha inválida, a senha deve conter letras maiúsculas.");
+        }
+        if(!senha.matches(".*[a-z].*")){
+            throw new IllegalArgumentException("Senha inválida, a senha deve conter letras minúsculas.");
+        }
+        if(senha.contains(" ")){
+            throw new IllegalArgumentException("Senha inválida, a senha não pode conter espaço.");
+        }
+        return true;
     }
 
     public long gerarMatricula(){
@@ -31,7 +54,7 @@ public class Aluno {
         return this.matricula = Long.parseLong(matricula);
     }
 
-    public String VerificaDataNascimento() {
+    public boolean VerificaDataNascimento() {
         boolean DataNumero = dataString.matches("\\d+");
         if (!DataNumero) {
             throw new IllegalArgumentException("Erro: data de nascimento fora do padrão");
@@ -42,7 +65,8 @@ public class Aluno {
         StringBuilder dataNascimentoBuilder = new StringBuilder(dataString);
         dataNascimentoBuilder.insert(2, "/");
         dataNascimentoBuilder.insert(5, "/");
-        return dataString = dataNascimentoBuilder.toString();
+        dataString = dataNascimentoBuilder.toString();
+        return true;
     }
     public LocalDate DatedataNascimento() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -121,5 +145,13 @@ public class Aluno {
 
     public void setDataString(String dataString) {
         this.dataString = dataString;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 }

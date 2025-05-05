@@ -13,7 +13,7 @@ public class AdminDAO {
 
     public void insert(Admin admin) {
         String sql = """
-                insert into admin(nome, senha, login) values (?, ?, ?) return id
+                insert into admin(nome, senha, login) values (?, ?, ?) returning id
                 """;
         try(Connection con = ConnectionFactory.getConnection();
             PreparedStatement stmt = con.prepareStatement(sql)){
@@ -84,7 +84,9 @@ public class AdminDAO {
                 throw new SQLException("Nenhum admin encontrado com o login!");
             }
             admin = new Admin(rs.getString("nome"), rs.getString("senha"));
-
+            admin.setId(rs.getInt("id"));
+            admin.setSenha(rs.getString("senha"));
+            admin.setLogin(rs.getString("login"));
         } catch (SQLException e) {
             System.out.println("Erro ao selecionar administrador!");
             e.printStackTrace();

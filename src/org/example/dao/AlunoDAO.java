@@ -39,7 +39,7 @@ public class AlunoDAO {
             stmt.setLong(1, matricula);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()){
-                Aluno aluno = new Aluno(rs.getString("nome"), rs.getLong("telefone"), rs.getString("data_de_nascimento"), rs.getString("cpf"), rs.getInt("id_curso"));
+                Aluno aluno = new Aluno(rs.getString("nome"), rs.getLong("telefone"), rs.getString("data_de_nascimento"), rs.getString("cpf"), rs.getInt("id_curso"), rs.getString("senha"));
                 return aluno;
             }
         }catch (SQLException e){
