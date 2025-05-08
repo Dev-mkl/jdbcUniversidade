@@ -40,6 +40,8 @@ public class AlunoDAO {
             ResultSet rs = stmt.executeQuery();
             if (rs.next()){
                 Aluno aluno = new Aluno(rs.getString("nome"), rs.getLong("telefone"), rs.getString("data_de_nascimento"), rs.getString("cpf"), rs.getInt("id_curso"), rs.getString("senha"));
+                aluno.setMatricula(rs.getLong("matricula"));
+                aluno.setDataNascimento(rs.getDate("data_de_nascimento").toLocalDate());
                 return aluno;
             }
         }catch (SQLException e){

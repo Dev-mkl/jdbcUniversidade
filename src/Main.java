@@ -7,6 +7,7 @@ import org.example.model.Aluno;
 import org.example.model.Curso;
 import org.example.dao.AdminDAO;
 
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 
@@ -342,6 +343,19 @@ public class Main {
                             System.out.println("Digite seu cpf: ");
                             String cpf = entry.nextLine();
                             alunoDAO.recuperarMatricula(cpf);
+                            break;
+                        }
+                        Aluno alunoDados = alunoDAO.getAluno(matriculaVef);
+                        if(alunoDados != null){
+                            CursoDAO cursoDAO = new CursoDAO();
+                            System.out.println("==DADOS DO ALUNO==");
+                            System.out.printf("Nome: %s\n", alunoDados.getNome());
+                            System.out.printf("Matricula: %d\n", alunoDados.getMatricula());
+                            System.out.printf("Telefone: %d\n", alunoDados.getTelefone());
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                            System.out.printf("Data de nascimento: %s\n", alunoDados.getDataNascimento().toString());
+                            Curso cursoRecuperar = cursoDAO.getCurso(alunoDados.getId_curso());
+                            System.out.printf("Curso: %s\n", cursoRecuperar.getNome());
                         }
                         break;
                     case 2:

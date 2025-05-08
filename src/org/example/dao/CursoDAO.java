@@ -9,6 +9,29 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class CursoDAO {
+
+    public Curso getCurso(int id){
+        String sql = "SELECT * FROM curso WHERE id_curso = ?";
+
+        try(Connection con = ConnectionFactory.getConnection();
+            PreparedStatement stmt = con.prepareStatement(sql)){
+
+            stmt.setInt(1, id);
+
+            ResultSet rs = stmt.executeQuery();
+
+            if(rs.next()){
+                Curso curso = new Curso(rs.getString("nome"));
+                curso.setId(rs.getInt("id_curso"));
+                return curso;
+            }
+        }catch (SQLException e){
+            System.out.println("Curso não encontrado.");
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public Curso existeCurso(String nome) {
         String sql = "select * from curso where nome = ?";
         try(Connection con = ConnectionFactory.getConnection();
