@@ -4,8 +4,7 @@ import org.example.model.Aluno;
 import org.example.factory.ConnectionFactory;
 
 import java.sql.*;
-import java.time.LocalDate;
-import java.util.List;
+
 
 public class AlunoDAO {
 
@@ -42,6 +41,7 @@ public class AlunoDAO {
                 Aluno aluno = new Aluno(rs.getString("nome"), rs.getLong("telefone"), rs.getString("data_de_nascimento"), rs.getString("cpf"), rs.getInt("id_curso"), rs.getString("senha"));
                 aluno.setMatricula(rs.getLong("matricula"));
                 aluno.setDataNascimento(rs.getDate("data_de_nascimento").toLocalDate());
+                aluno.setId(rs.getInt("id_aluno"));
                 return aluno;
             }
         }catch (SQLException e){
@@ -78,7 +78,7 @@ public class AlunoDAO {
     }
 
     public void select(Long matricula) {
-        String sql = "SELECT aluno.nome as aluno_nome, aluno.matricula as aluno_matricula, curso.nome as curso_nome FROM aluno join curso on aluno.id_curso = curso.id_curso where matricula = ?";
+        String sql = "SELECT *, curso.nome as curso_nome FROM aluno join curso on aluno.id_curso = curso.id_curso where matricula = ?";
         try (Connection con = ConnectionFactory.getConnection();
             PreparedStatement stmt = con.prepareStatement(sql)){
 
@@ -88,9 +88,12 @@ public class AlunoDAO {
 
             if(rs.next()){
                 System.out.println("====Dados do aluno====");
-                System.out.printf("Nome: %s\n", rs.getString("Aluno_nome"));
-                System.out.printf("Matricula: %d\n", rs.getLong("Aluno_matricula"));
+                System.out.printf("Nome: %s\n", rs.getString("nome"));
+                System.out.printf("Matricula: %d\n", rs.getLong("matricula"));
                 System.out.printf("Curso: %s\n", rs.getString("curso_nome"));
+                System.out.println("Telefone: " + rs.getLong("telefone"));
+                System.out.println("Data de nascimento: " + rs.getDate("data_nascimento"));
+                System.out.println("CPF: " + rs.getString("cpf"));
             }
         } catch (SQLException e) {
             System.out.println("Erro exibir aluno");
@@ -117,17 +120,17 @@ public class AlunoDAO {
     }
 
     public void update(Aluno aluno, long matriculaAntiga) {
-        String sql = "update aluno set nome = ?, matricula = ?,telefone = ?,data_de_nascimento = ?,cpf = ?,id_curso = ? where matricula = ? returning id_aluno";
+        String sql = "update aluno set nome = ?,telefone = ?,data_de_nascimento = ?,cpf = ?,id_curso = ?, senha = ? where matricula = ? returning id_aluno";
 
         try(Connection con = ConnectionFactory.getConnection();
             PreparedStatement stmt = con.prepareStatement(sql)){
 
             stmt.setString(1, aluno.getNome());
-            stmt.setLong(2, aluno.getMatricula());
-            stmt.setLong(3, aluno.getTelefone());
-            stmt.setDate(4, java.sql.Date.valueOf(aluno.getDataNascimento()));
-            stmt.setString(5, aluno.getCpf());
-            stmt.setInt(6, aluno.getId_curso());
+            stmt.setLong(2, aluno.getTelefone());
+            stmt.setDate(3, java.sql.Date.valueOf(aluno.getDataNascimento()));
+            stmt.setString(4, aluno.getCpf());
+            stmt.setInt(5, aluno.getId_curso());
+            stmt.setString(6, aluno.getSenha());
             stmt.setLong(7, matriculaAntiga);
 
             ResultSet rs = stmt.executeQuery();
@@ -140,5 +143,42 @@ public class AlunoDAO {
             System.out.println("Erro ao atualizar aluno");
             e.printStackTrace();
         }
+    }
+
+    public void listarAlunos(){
+        String sql = "select * from aluno";
+
+        try(Connection con = ConnectionFactory.getConnection();
+            PreparedStatement stmt = con.prepareStatement(sql)) {
+
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()){
+                String nome = rs.getString("nome");
+                int id = rs.getInt("id_aluno");
+                long matricula = rs.getLong("matricula");
+
+                System.out.printf("%s\t\t\t\t\t%d\t\t%d", nome, id, matricula);
+            }
+        }catch (SQLException e){
+            System.out.println("Erro ao listar alunos");
+            e.printStackTrace();
+        }
+    }
+
+    public int getMaxId(){
+        String sql = "select max(id_aluno) from aluno";
+
+        try(Connection con = ConnectionFactory.getConnection();
+            PreparedStatement stmt = con.prepareStatement(sql)){
+
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()){
+                return rs.getInt(rs.getInt(0) + 1);
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao buscar numero de id");
+            e.printStackTrace();
+        }
+        return 1;
     }
 }

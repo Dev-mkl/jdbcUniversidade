@@ -1,5 +1,7 @@
 package org.example.model;
 
+import org.example.dao.AlunoDAO;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -22,6 +24,39 @@ public class Aluno {
         this.cpf = cpf;
         this.id_curso = id_curso;
     }
+
+    public boolean validarCPF(String cpf) {
+        cpf = cpf.replaceAll("[^\\d]", "");
+
+        if (cpf.length() != 11 || cpf.matches("(\\d)\\1{10}"))
+            return false;
+
+        try {
+            int soma1 = 0, soma2 = 0;
+
+            for (int i = 0; i < 9; i++) {
+                int digito = cpf.charAt(i) - '0';
+                soma1 += digito * (10 - i);
+                soma2 += digito * (11 - i);
+            }
+
+            int dv1 = calcularDigito(soma1);
+
+            soma2 += dv1 * 2;
+
+            int dv2 = calcularDigito(soma2);
+
+            return cpf.charAt(9) - '0' == dv1 && cpf.charAt(10) - '0' == dv2;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    private static int calcularDigito(int soma) {
+        int resto = soma % 11;
+        return (resto < 2) ? 0 : 11 - resto;
+    }
+
 
     public boolean verificarSenha(){
         if (senha.length() < 8 || senha.length() > 12){
@@ -46,11 +81,13 @@ public class Aluno {
     }
 
     public long gerarMatricula(){
+        AlunoDAO alunoDAO = new AlunoDAO();
+
         LocalDate date = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String dataAtual = date.format(formatter);
 
-        String matricula = dataAtual.substring(6) + String.valueOf(id_curso) + cpf.substring(0, cpf.length() - 8);
+        String matricula = dataAtual.substring(6) + String.valueOf(id_curso) + cpf.substring(0, cpf.length() - 8) + alunoDAO.getMaxId();
         return this.matricula = Long.parseLong(matricula);
     }
 
